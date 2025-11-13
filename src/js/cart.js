@@ -6,6 +6,17 @@ function renderCartContents() {
   document.querySelector(".product-list").innerHTML = htmlItems.join("");
 }
 
+function clearCartContents() {
+  localStorage.removeItem("so-cart");
+  document.querySelector(".product-list").innerHTML = "";
+}
+
+function setupClearButton() {
+  const clearButton = document.querySelector(".cart-clear");
+  if (clearButton) {
+    clearButton.addEventListener("click", clearCartContents);
+  }
+}
 function cartItemTemplate(item) {
   const newItem = `<li class="cart-card divider">
   <a href="#" class="cart-card__image">
@@ -26,3 +37,4 @@ function cartItemTemplate(item) {
 }
 
 renderCartContents();
+setupClearButton();
