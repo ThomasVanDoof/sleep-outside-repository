@@ -1,14 +1,26 @@
-import { getLocalStorage, setLocalStorage } from "./utils.mjs";
-import ProductData from "./ProductData.mjs";
+import { getLocalStorage, setLocalStorage, getParam } from "./utils.mjs";
+import ProductData from './ProductData.mjs';
+import ProductDetails from './ProductDetails.mjs';
 
-const dataSource = new ProductData("tents");
+const productId = getParam('product');      // ?product=ID
+const dataSource = new ProductData();       // flexible for any category
+
+const product = new ProductDetails(productId, dataSource);
+product.init();
+
+const baseURL = import.meta.env.VITE_SERVER_URL;
+
+// fetch product by ID from API
+async function findProductById(id) {
+  const response = await fetch(`${baseURL}product/${id}`);
+  const data = await response.json();
+  return data.Result || data; // depending on API response structure
+}
 
 async function addToCartHandler(e) {
   const productId = e.target.dataset.id;
 
-  // fetch product from JSON data
-  const product = await dataSource.findProductById(productId);
-
+  const product = await findProductById(productId);
   if (!product) {
     console.error("Product not found:", productId);
     return;
@@ -17,17 +29,29 @@ async function addToCartHandler(e) {
   const productToCart = {
     Id: String(product.Id),
     Name: product.Name || product.NameWithoutBrand || "",
-    Image: product.Image || "",
+    Image: product.PrimaryMedium || product.Image || "",
     FinalPrice: Number(product.FinalPrice || product.ListPrice || 0),
     Colors: product.Colors || [{ ColorName: "N/A" }]
   };
 
-  // get cart
-  const cart = getLocalStorage("so-cart"); // returns array
+  const cart = getLocalStorage("so-cart");
   cart.push(productToCart);
-
-  setLocalStorage("so-cart", cart); // save array
+  setLocalStorage("so-cart", cart);
 }
 
+// attach listener
 const addButton = document.getElementById("addToCart");
 if (addButton) addButton.addEventListener("click", addToCartHandler);
+
+// optional: fetch and render product details on page load
+(async () => {
+  const productId = getParam("product");
+  if (!productId) return;
+
+  const product = await findProductById(productId);
+  if (!product) return;
+
+  document.querySelector("#productName").textContent = product.Name || product.NameWithoutBrand;
+  document.querySelector("#productPrice").textContent = `$${product.FinalPrice.toFixed(2)}`;
+  document.querySelector("#productImage").src = product.PrimaryLarge || product.PrimaryMedium || product.Image;
+})();
