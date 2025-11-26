@@ -54,11 +54,11 @@ export function loadHeaderFooter() {
   if (header) {
     header.innerHTML = `
       <div class="logo">
-        <img src="../public/json/images/noun_Tent_2517.svg" alt="tent logo" />
-        <a href="../index.html">SleepOutside</a>
+        <img src="/public/json/images/noun_Tent_2517.svg" alt="tent logo" />
+        <a href="/index.html">SleepOutside</a>
       </div>
       <div class="cart">
-        <a href="../cart/index.html">Cart</a>
+        <a href="/cart/index.html">Cart</a>
       </div>
     `;
   }
