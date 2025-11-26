@@ -1,5 +1,5 @@
 // ../js/product-detail.js
-import ProductData from './ProductData.mjs';
+import ExternalServices from './ExternalServices.mjs';
 import ProductDetails from './ProductDetails.mjs';
 import { getParam, loadHeaderFooter } from './utils.mjs';
 
@@ -14,7 +14,7 @@ if (!productId) {
   // Optionally, you could redirect to the product listing page here
 } else {
   // Create a data source for fetching product info
-  const dataSource = new ProductData();
+  const dataSource = new ExternalServices();
 
   // Create the ProductDetails instance
   const product = new ProductDetails(productId, dataSource);
