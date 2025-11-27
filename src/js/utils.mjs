@@ -54,11 +54,11 @@ export function loadHeaderFooter() {
   if (header) {
     header.innerHTML = `
       <div class="logo">
-        <img src="../public/json/images/noun_Tent_2517.svg" alt="tent logo" />
-        <a href="../index.html">SleepOutside</a>
+        <img src="/public/json/images/noun_Tent_2517.svg" alt="tent logo" />
+        <a href="/index.html">SleepOutside</a>
       </div>
       <div class="cart">
-        <a href="../cart/index.html">Cart</a>
+        <a href="/cart/index.html">Cart</a>
       </div>
     `;
   }
@@ -70,4 +70,16 @@ export function loadHeaderFooter() {
       &copy;2025 ⛺ SleepOutside ⛺ WDD 330 ⛺ BYU-Idaho
     `;
   }
+}
+// convert a form element into a JSON object
+export function formDataToJSON(form) {
+  const formData = new FormData(form);
+  const json = {};
+
+  formData.forEach((value, key) => {
+    // trim strings and leave numbers as-is
+    json[key] = value.trim ? value.trim() : value;
+  });
+
+  return json;
 }

@@ -13,7 +13,7 @@ function productCardTemplate(product) {
   let img = product.Image || "";
   img = img.replace(/^(\.\.\/)+/, "");
   if (!img.includes("public/")) {
-    img = `public/json/${img}`;
+    img = `/public/json/${img}`;
   }
 
   const brand = (product.Brand && product.Brand.Name) || "";
@@ -22,7 +22,7 @@ function productCardTemplate(product) {
   const price = typeof priceNum === "number" ? priceNum.toFixed(2) : (priceNum || "");
 
   return `<li class="product-card">
-    <a href="product_pages/?product=${encodeURIComponent(product.Id)}">
+    <a href="/product_pages/index.html?product=${encodeURIComponent(product.Id)}">
       <img src="${escapeHtml(img)}" alt="Image of ${escapeHtml(name)}" />
       <h3 class="card__brand">${escapeHtml(brand)}</h3>
       <h2 class="card__name">${escapeHtml(name)}</h2>

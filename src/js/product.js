@@ -1,10 +1,9 @@
 import { getLocalStorage, setLocalStorage, getParam } from "./utils.mjs";
-import ProductData from './ProductData.mjs';
+import ExternalServices from './ExternalServices.mjs';
 import ProductDetails from './ProductDetails.mjs';
 
 const productId = getParam('product');      // ?product=ID
-const dataSource = new ProductData();       // flexible for any category
-
+const dataSource = new ExternalServices();       // flexible for any category
 const product = new ProductDetails(productId, dataSource);
 product.init();
 
