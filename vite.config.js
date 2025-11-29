@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   root: "src/",
 
-    build: {
+  build: {
     outDir: "../dist",
     rollupOptions: {
       input: {
@@ -13,6 +13,7 @@ export default defineConfig({
         checkout: resolve(__dirname, "src/checkout/index.html"),
         product_listing: resolve(__dirname, "src/product_listing/index.html"),
         product_pages: resolve(__dirname, "src/product_pages/index.html"),
+        success: resolve(__dirname, "src/checkout/success.html"),
       },
     },
   },

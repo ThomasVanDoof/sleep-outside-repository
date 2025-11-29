@@ -266,7 +266,6 @@ footer {
   padding: 1em;
 }
 
-
 .checkout-btn {
   display: inline-block;
   padding: 10px 20px;
@@ -277,13 +276,11 @@ footer {
   font-weight: bold;
 }
 
-
 .checkout-layout {
   display: flex;
   gap: 3rem;
   margin-top: 2rem;
 }
-
 
 .checkout-form,
 .order-summary {
@@ -295,19 +292,16 @@ footer {
   box-shadow: 0 2px 6px #0002;
 }
 
-
 .checkout-form label {
   display: block;
   margin-bottom: 1rem;
 }
-
 
 .checkout-form input {
   width: 100%;
   padding: 8px;
   margin-top: 4px;
 }
-
 
 .place-order {
   margin-top: 1rem;

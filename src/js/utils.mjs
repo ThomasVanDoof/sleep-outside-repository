@@ -71,13 +71,11 @@ export function loadHeaderFooter() {
     `;
   }
 }
-// convert a form element into a JSON object
 export function formDataToJSON(form) {
   const formData = new FormData(form);
   const json = {};
 
   formData.forEach((value, key) => {
-    // trim strings and leave numbers as-is
     json[key] = value.trim ? value.trim() : value;
   });
 

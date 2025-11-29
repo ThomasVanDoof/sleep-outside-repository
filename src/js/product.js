@@ -1,9 +1,9 @@
 import { getLocalStorage, setLocalStorage, getParam } from "./utils.mjs";
-import ExternalServices from './ExternalServices.mjs';
-import ProductDetails from './ProductDetails.mjs';
+import ExternalServices from "./ExternalServices.mjs";
+import ProductDetails from "./ProductDetails.mjs";
 
-const productId = getParam('product');      // ?product=ID
-const dataSource = new ExternalServices();       // flexible for any category
+const productId = getParam("product"); // ?product=ID
+const dataSource = new ExternalServices(); // flexible for any category
 const product = new ProductDetails(productId, dataSource);
 product.init();
 
@@ -17,9 +17,6 @@ async function findProductById(id) {
 }
 
 async function addToCartHandler(e) {
-  const productId = e.target.dataset.id;
-
-  const product = await findProductById(productId);
   if (!product) {
     console.error("Product not found:", productId);
     return;
@@ -30,7 +27,7 @@ async function addToCartHandler(e) {
     Name: product.Name || product.NameWithoutBrand || "",
     Image: product.PrimaryMedium || product.Image || "",
     FinalPrice: Number(product.FinalPrice || product.ListPrice || 0),
-    Colors: product.Colors || [{ ColorName: "N/A" }]
+    Colors: product.Colors || [{ ColorName: "N/A" }],
   };
 
   const cart = getLocalStorage("so-cart");
@@ -44,13 +41,14 @@ if (addButton) addButton.addEventListener("click", addToCartHandler);
 
 // optional: fetch and render product details on page load
 (async () => {
-  const productId = getParam("product");
   if (!productId) return;
 
-  const product = await findProductById(productId);
   if (!product) return;
 
-  document.querySelector("#productName").textContent = product.Name || product.NameWithoutBrand;
-  document.querySelector("#productPrice").textContent = `$${product.FinalPrice.toFixed(2)}`;
-  document.querySelector("#productImage").src = product.PrimaryLarge || product.PrimaryMedium || product.Image;
+  document.querySelector("#productName").textContent =
+    product.Name || product.NameWithoutBrand;
+  document.querySelector("#productPrice").textContent =
+    `$${product.FinalPrice.toFixed(2)}`;
+  document.querySelector("#productImage").src =
+    product.PrimaryLarge || product.PrimaryMedium || product.Image;
 })();
