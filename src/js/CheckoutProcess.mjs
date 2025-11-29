@@ -18,15 +18,15 @@ function calculateSummary() {
 }
 calculateSummary();
 
-// Package cart items for checkout
 function packageItems(items) {
   return items.map(item => ({
     id: item.Id || item.id,
     name: item.Name || item.name,
-    price: item.FinalPrice || item.price,
+    price: +(item.FinalPrice || item.price).toFixed(2),
     quantity: item.quantity || 1
   }));
 }
+
 
 // Handle form submission
 const form = document.querySelector("#checkoutForm");
@@ -54,27 +54,44 @@ form.addEventListener("submit", async (event) => {
   const shipping = subtotal > 0 ? 10 : 0;
   const total = +(subtotal + tax + shipping).toFixed(2);
 
-  const order = {
-    ...formData,
-    orderDate: new Date().toISOString(),
-    items: packageItems(cart),
-    orderTotal: total,
-    tax,
-    shipping
-  };
+const order = {
+  orderDate: new Date().toISOString(),
+
+  // Customer info — must match assignment keys
+  fname: formData.fname,
+  lname: formData.lname,
+  street: formData.street,
+  city: formData.city,
+  state: formData.state,
+  zip: formData.zip,
+
+  // Payment info
+  cardNumber: formData.cardNumber,
+  expiration: formData.expiration,
+  code: formData.code,
+
+  // Cart items
+  items: packageItems(cart),
+
+  // Totals
+  orderTotal: total.toFixed(2),
+  shipping: shipping.toFixed(2),
+  tax: tax.toFixed(2)
+};
+
+
+
 
   console.log("ORDER READY TO SEND:", order);
 
   const service = new ExternalServices();
 
-  // Try/catch for API call and happy path
   try {
     const response = await service.checkout(order);
     console.log("SERVER RESPONSE:", response);
 
     if (response.success) {
-      // ✅ Happy path
-      localStorage.removeItem("so-cart"); // clear cart
+      localStorage.removeItem("so-cart");
       window.location.href = "/checkout/success.html"; // redirect to success page
     } else {
       alert("Order failed. Try again.");

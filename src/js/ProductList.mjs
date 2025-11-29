@@ -1,4 +1,5 @@
-//html-escaping guide helper thang for inserting text into templates
+import ExternalServices from "./ExternalServices.mjs";
+
 function escapeHtml(str = "") {
   return String(str)
     .replace(/&/g, "&amp;")
@@ -8,7 +9,6 @@ function escapeHtml(str = "") {
     .replace(/'/g, "&#39;");
 }
 
-//product card template using a template literal
 function productCardTemplate(product) {
   let img = product.Image || "";
   img = img.replace(/^(\.\.\/)+/, "");
@@ -18,8 +18,14 @@ function productCardTemplate(product) {
 
   const brand = (product.Brand && product.Brand.Name) || "";
   const name = product.NameWithoutBrand || product.Name || "";
-  const priceNum = typeof product.FinalPrice === "number" ? product.FinalPrice : product.ListPrice;
-  const price = typeof priceNum === "number" ? priceNum.toFixed(2) : (priceNum || "");
+  const priceNum =
+    typeof product.FinalPrice === "number"
+      ? product.FinalPrice
+      : product.ListPrice;
+  const price =
+    typeof priceNum === "number"
+      ? priceNum.toFixed(2)
+      : priceNum || "";
 
   return `<li class="product-card">
     <a href="/product_pages/index.html?product=${encodeURIComponent(product.Id)}">
@@ -35,22 +41,32 @@ export default class ProductList {
   constructor(category, dataSource, listElement) {
     this.category = category;
     this.dataSource = dataSource;
+
     if (typeof listElement === "string") {
-      this.listElement = (typeof document !== "undefined") ? document.querySelector(listElement) : null;
+      this.listElement =
+        typeof document !== "undefined"
+          ? document.querySelector(listElement)
+          : null;
     } else {
       this.listElement = listElement;
     }
   }
 
-  async init() {
-    const list = await this.dataSource.getData(this.category);
+  async init(products = null) {
+    // If results passed in, use them; else fetch normally.
+    const list =
+      products || (await this.dataSource.getData(this.category));
+
     this.renderList(list);
   }
 
-  //renderList takes the array of products 'n inserts the generated markup into dom
   renderList(products = []) {
     if (!this.listElement) return;
-    const html = products.map((p) => productCardTemplate(p)).join("\n");
+
+    const html = products
+      .map((p) => productCardTemplate(p))
+      .join("\n");
+
     this.listElement.innerHTML = html;
   }
 }

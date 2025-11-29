@@ -31,10 +31,7 @@ function updateCartTotal() {
 
   footer.classList.remove("hide");
 
-  const total = cart.reduce(
-    (sum, item) => sum + Number(item.FinalPrice),
-    0
-  );
+  const total = cart.reduce((sum, item) => sum + Number(item.FinalPrice), 0);
 
   totalElement.textContent = `Total: $${total.toFixed(2)}`;
 }
